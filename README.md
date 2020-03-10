@@ -66,10 +66,10 @@ class ... : AODialogViewDelegate {
 ```
 
 ### To-Do
-[ ] Change constraints for screen rotation.
-[ ] Add 12-hours picker format.
-[ ] Refactor some code.
-[ ] Add example project.
+- [ ] Change constraints for screen rotation.
+- [ ] Add 12-hours picker format.
+- [ ] Refactor some code.
+- [ ] Add example project.
 
 License
 ----
