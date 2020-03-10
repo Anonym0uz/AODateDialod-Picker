@@ -33,6 +33,7 @@ AODialogView.shared.show(delegate: self,
 ```
 
 Analyze some varibles:
+
 Varibles  | Class | Description
 ------------- | ------------- | ------------
 delegate  | AOPickerDelegate | Use for check when clicked to buttons in picker.
