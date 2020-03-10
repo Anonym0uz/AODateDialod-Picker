@@ -16,6 +16,10 @@ Custom representation of date & time picker. Main differences from UIDatePicker:
 -
 -
 
+## Installation
+For now, cocoapods version is not available. :(
+Simply drag AODialogView.swift into your project.
+
 ## Usage
 
 Usage example:
