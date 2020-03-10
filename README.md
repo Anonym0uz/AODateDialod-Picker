@@ -12,9 +12,9 @@ Custom representation of date & time picker. Main differences from UIDatePicker:
 ##### Support iOS **10-13**
   
   # Screenshots
--
--
--
+![Screen 1](https://raw.githubusercontent.com/anonym0uz/AODateDialod-Picker/master/screenshots/screen1.png?raw=true)
+![Screen 2](https://raw.githubusercontent.com/anonym0uz/AODateDialod-Picker/master/screenshots/screen2.png?raw=true)
+![Screen 3](https://raw.githubusercontent.com/anonym0uz/AODateDialod-Picker/master/screenshots/screen3.png?raw=true)
 
 ## Installation
 For now, cocoapods version is not available. :(
