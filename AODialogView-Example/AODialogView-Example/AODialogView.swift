@@ -57,6 +57,8 @@ class AODialogView: UIView {
     var defaultDate: Date!
     var defaultDateFormat: String = "dd.MM.yyyy, HH:mm"
     
+    var leftHandConfirm: Bool = false
+    
     var minDate: Date!
     var maxDate: Date!
     
@@ -71,14 +73,22 @@ class AODialogView: UIView {
     let borderBottomView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.systemGray2
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = UIColor.systemGray2
+        } else {
+            view.backgroundColor = UIColor.lightGray
+        }
         return view
     }()
     
     let buttonBorder: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.systemGray2
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = UIColor.systemGray2
+        } else {
+            view.backgroundColor = UIColor.lightGray
+        }
         return view
     }()
     
@@ -88,7 +98,11 @@ class AODialogView: UIView {
         btn.setTitle("Done", for: .normal)
         btn.setTitleColor(UIColor.systemRed, for: .normal)
         btn.setTitleColor(UIColor.systemGray, for: .highlighted)
-        btn.backgroundColor = .secondarySystemBackground
+        if #available(iOS 13.0, *) {
+            btn.backgroundColor = .secondarySystemBackground
+        } else {
+            btn.backgroundColor = .white
+        }
         btn.clipsToBounds = true
         btn.layer.cornerRadius = 10
         return btn
@@ -101,7 +115,11 @@ class AODialogView: UIView {
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         btn.setTitleColor(UIColor.systemBlue, for: .normal)
         btn.setTitleColor(UIColor.systemGray, for: .highlighted)
-        btn.backgroundColor = .secondarySystemBackground
+        if #available(iOS 13.0, *) {
+            btn.backgroundColor = .secondarySystemBackground
+        } else {
+            btn.backgroundColor = .white
+        }
         btn.clipsToBounds = true
         btn.layer.cornerRadius = 10
         return btn
@@ -131,7 +149,7 @@ class AODialogView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func show(delegate: AODialogViewDelegate, doneTitle: String = "Done", cancelTitle: String = "Cancel", style: AODialogStyle = .dateTime, enableBackgroundDismiss: Bool = true, defaultDate: Date = Date(), minimumDate: Date? = nil, maximumDate: Date? = nil, dateFormat: String = "dd.MM.yyyy, HH:mm", alertStyle: AODialogAlertStyle = .alert) {
+    func show(delegate: AODialogViewDelegate, doneTitle: String = "Done", cancelTitle: String = "Cancel", style: AODialogStyle = .dateTime, leftHandConfirm: Bool = false, enableBackgroundDismiss: Bool = true, defaultDate: Date = Date(), minimumDate: Date? = nil, maximumDate: Date? = nil, dateFormat: String = "dd.MM.yyyy, HH:mm", alertStyle: AODialogAlertStyle = .alert) {
         self.delegate = delegate
         self.alertStyle = alertStyle
         self.style = style
@@ -142,6 +160,7 @@ class AODialogView: UIView {
         self.defaultDateFormat = dateFormat
         self.minDate = minimumDate
         self.maxDate = maximumDate
+        self.leftHandConfirm = leftHandConfirm
         setupBackground()
     }
     
@@ -169,7 +188,11 @@ class AODialogView: UIView {
         addSubview(contentView)
         
         dialogView = UIView()
-        dialogView.backgroundColor = .secondarySystemBackground
+        if #available(iOS 13.0, *) {
+            dialogView.backgroundColor = .secondarySystemBackground
+        } else {
+            dialogView.backgroundColor = .white
+        }
         dialogView.translatesAutoresizingMaskIntoConstraints = false
         dialogView.clipsToBounds = true
         dialogView.layer.cornerRadius = 7
@@ -218,7 +241,6 @@ class AODialogView: UIView {
         datePicker.maximumDate = maxDate
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.setDate(defaultDate, animated: true)
-        datePicker.locale = Locale(identifier: "ru")
         datePicker.addTarget(self, action: #selector(dateHasChanged(picker:)), for: .valueChanged)
         
         let dateF = DateFormatter()
@@ -283,15 +305,27 @@ class AODialogView: UIView {
     fileprivate func setupButtonConstraints() {
         
         if alertStyle == .alert {
-            cancelButton.leadingAnchor.constraint(equalTo: dialogView.leadingAnchor, constant: 0).isActive = true
-            cancelButton.topAnchor.constraint(equalTo: dialogView.bottomAnchor, constant: 20).isActive = true
-            cancelButton.trailingAnchor.constraint(equalTo: dialogView.centerXAnchor, constant: -5).isActive = true
-            cancelButton.heightAnchor.constraint(equalToConstant: buttonsHeight).isActive = true
-            
-            doneButton.trailingAnchor.constraint(equalTo: dialogView.trailingAnchor, constant: 0).isActive = true
-            doneButton.topAnchor.constraint(equalTo: dialogView.bottomAnchor, constant: 20).isActive = true
-            doneButton.heightAnchor.constraint(equalToConstant: buttonsHeight).isActive = true
-            doneButton.leadingAnchor.constraint(equalTo: dialogView.centerXAnchor, constant: 5).isActive = true
+            if leftHandConfirm {
+                doneButton.leadingAnchor.constraint(equalTo: dialogView.leadingAnchor, constant: 0).isActive = true
+                doneButton.topAnchor.constraint(equalTo: dialogView.bottomAnchor, constant: 20).isActive = true
+                doneButton.trailingAnchor.constraint(equalTo: dialogView.centerXAnchor, constant: -5).isActive = true
+                doneButton.heightAnchor.constraint(equalToConstant: buttonsHeight).isActive = true
+                
+                cancelButton.trailingAnchor.constraint(equalTo: dialogView.trailingAnchor, constant: 0).isActive = true
+                cancelButton.topAnchor.constraint(equalTo: dialogView.bottomAnchor, constant: 20).isActive = true
+                cancelButton.heightAnchor.constraint(equalToConstant: buttonsHeight).isActive = true
+                cancelButton.leadingAnchor.constraint(equalTo: dialogView.centerXAnchor, constant: 5).isActive = true
+            } else {
+                cancelButton.leadingAnchor.constraint(equalTo: dialogView.leadingAnchor, constant: 0).isActive = true
+                cancelButton.topAnchor.constraint(equalTo: dialogView.bottomAnchor, constant: 20).isActive = true
+                cancelButton.trailingAnchor.constraint(equalTo: dialogView.centerXAnchor, constant: -5).isActive = true
+                cancelButton.heightAnchor.constraint(equalToConstant: buttonsHeight).isActive = true
+                
+                doneButton.trailingAnchor.constraint(equalTo: dialogView.trailingAnchor, constant: 0).isActive = true
+                doneButton.topAnchor.constraint(equalTo: dialogView.bottomAnchor, constant: 20).isActive = true
+                doneButton.heightAnchor.constraint(equalToConstant: buttonsHeight).isActive = true
+                doneButton.leadingAnchor.constraint(equalTo: dialogView.centerXAnchor, constant: 5).isActive = true
+            }
             
 //            buttonBorder.topAnchor.constraint(equalTo: borderBottomView.bottomAnchor, constant: 0).isActive = true
 //            buttonBorder.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: 0).isActive = true
@@ -301,7 +335,11 @@ class AODialogView: UIView {
     }
     
     fileprivate func setupActionSheet() {
-        contentView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            contentView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
+        } else {
+            contentView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        }
         
         cancelButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
         cancelButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
@@ -380,10 +418,10 @@ class AODialogView: UIView {
 
 extension AODialogView {
     /// Handle device orientation changes
-    @objc func deviceOrientationDidChange(_ notification: Notification) {
-        self.frame = UIScreen.main.bounds
-        dialogView.clearConstraints()
-        
-        setupDialogContraints()
-    }
+//    @objc func deviceOrientationDidChange(_ notification: Notification) {
+//        self.frame = UIScreen.main.bounds
+//        dialogView.clearConstraints()
+//
+//        setupDialogContraints()
+//    }
 }
