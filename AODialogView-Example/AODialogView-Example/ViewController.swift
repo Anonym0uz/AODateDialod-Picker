@@ -21,6 +21,14 @@ class ViewController: UIViewController {
         return btn
     }()
     
+    var dateLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.numberOfLines = 0
+        lbl.text = "Date selected"
+        return lbl
+    }()
+    
     var dialogView: AODialogView!
     
     var defaultDate: Date = Date()
@@ -42,6 +50,10 @@ class ViewController: UIViewController {
         }
         showButton.addTarget(self, action: #selector(showDialog), for: .touchUpInside)
         view.addSubview(showButton)
+        view.addSubview(dateLabel)
+        
+        dateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        dateLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
         
         showButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         if #available(iOS 11.0, *) {
@@ -147,6 +159,8 @@ extension ViewController: AODialogViewDelegate {
     func doneClicked(selectedDate: Date) {
         self.dialogView = nil
         self.defaultDate = selectedDate
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
+        dateLabel.text = dateFormatter.string(from: selectedDate)
     }
     
     func cancelClicked() {
